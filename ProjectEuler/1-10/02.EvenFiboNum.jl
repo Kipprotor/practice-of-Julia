@@ -20,4 +20,5 @@ end
 fiboLst = makeFiboSeq_under(4*10^6)
 len = floor(Int, length(fiboLst)/3)
 #println(fiboLst)
-println(sum(fiboLst[3:3:3*len]))
+println("The sum of the even-number in the Fibonacci sequence
+whose values under 4 * 10^6: ",sum(fiboLst[3:3:3*len]))

@@ -8,17 +8,20 @@ the least common multiple
 もし既に因数があるが、指数が足りない場合は、指数が足りるまで足す。
 =#
 
-#=
-function eucldLcm(n1,n2)
+
+function eucldGcd(n1,n2)
   n1>n2 ? (a,b) = (n1,n2) : (a,b) = (n2,n1)
   n = a%b
   while n != 0
-    return eucldLcm(b,n)
+    return eucldGcd(b,n)
   end
   return b
 end
-=#
 
-for i in 1:19
-  n = eucldLcm(i,i+1)
+result = 1
+for i in 1:20
+  global result = result * i ÷ eucldGcd(result,i)
 end
+
+println("The smallest positive number that is evenly divisible
+by all of the numbers from 1 to 20: ",result)
