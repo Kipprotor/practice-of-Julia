@@ -1,37 +1,40 @@
 # find コマンドの julia での実装
 module Find
   export find
-  function find(dir, ext)
-    endsExt = endswith(ext)
-    result = [joinpath(dir,f) for f in readdir(dir) if endsExt(f)]
-    #println("for: ",result)
-    for d in filter(isdir, readdir(dir))
-      result = vcat(result, find(joinpath(dir,d), ext))
-    end
-    return result
+  
+  find(path, ext) = filter(f -> isTargetPath(f,ext), readdir(path,join=true))
+  
+  function isTargetPath(path,ext)
+    if isdir(path) || endswith(path,ext)
+      return true
+    else
+      return false
+    end 
   end
+
 end
 
-#=
-for i in find(pwd(), ".jl")
-  println(i)
-end
-=#
-
-#カレントディレクトリにある".jl"で終わるファイルのリストを作成
-jlFiles = Find.find(".", ".jl")
-# ♥♣♦♠
-
-while true
-  println("\nどのプログラムを実行しますか")
-  for (index, value) in enumerate(jlFiles)
-    println("$index: $value")
-  end
+function programSelector(path)
+  #カレントディレクトリにある".jl"で終わるファイルのリストを作成
+  jlFiles = Find.find(path, ".jl")
+  
+  println("\nプログラムのパスを指定してください")
+  #println("(0: go back to main menu)")
+  map( file -> println(file), enumerate(jlFiles))
+  
   inpt = parse(Int,readline())
-  if inpt != 0 && inpt <= length(jlFiles)
-    include(jlFiles[inpt])
+  #=
+  if inpt == 0
+    programSelector(path)
   else
-    print("終了します")
-    break
+  =#
+  if isdir(jlFiles[inpt])
+    programSelector(jlFiles[inpt])
+  else
+    include(jlFiles[inpt])
   end
 end
+
+
+# ♥♣♦♠
+programSelector(pwd())
