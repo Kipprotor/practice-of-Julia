@@ -1,5 +1,7 @@
 # What is the largest prime factor of the number 600851475143?
+num = 600851475143
 
+#= エラトステネスの篩を利用すると、おそらくメモリ不足になる
 function erastosthenes(n)
   is_prime = trues(n)
   is_prime[1] = false
@@ -14,25 +16,29 @@ function erastosthenes(n)
   end
   return [i for i in 2:n if is_prime[i]]
 end
+print(erastosthenes(num))
+=#
 
-function primeTrilDiv(n)
-  primeLst = []
-  
-  for i in 2:n
-    is_prime = true
-    
-    for p in primeLst
-      if i % p == 0
-        is_prime = false
-        break
+# まだまだ修正の余地はありそう
+function largestPrimeFactor(n::Int64)::Vector{Int64}
+  divisor = []
+  #for p in isqrt(n):-1:2
+  for p in 2:isqrt(n)
+    if n % p == 0
+      while n % p == 0
+        n /= p
       end
-    end
-
-    if is_prime
-      push!(primeLst, i)
+      push!(divisor,p)
     end
   end
-  return primeLst
+  
+  if n != 1 || divisor == []
+    append!(divisor,n)
+  end
+  return divisor
 end
-for i in 
-println(@time erastosthenes(100))
+
+println(
+  "The largest prime factor of the number $(num):\n",
+  @time largestPrimeFactor(num)
+)

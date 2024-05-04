@@ -22,6 +22,15 @@ const Series = ""*
 "05886116467109405077541002256983155200055935729725" *
 "71636269561882670428252483600823257530420752963450"
 
+function listOfProduct(series::AbstractString)
+  product = 1
+  for digit in series
+    num = parse(Int, digit)
+    product *= num
+  end
+  return product
+end
+
 #tidySeries2 = split(replace(Series, r"0\d{0,12}0" => "0"), "0")
 
 # Splits the string by 0, then leaves only those with length greater than 12.
@@ -29,4 +38,18 @@ tidySeries = [i for i in split(Series, "0") if length(i) > 12]
 
 println("tidySeries:")
 #display(tidySeries)
-map(x -> prxntln("length: $(length(x)), seq,$(x)"), tidySeries)
+map(x -> println("length: $(length(x)), seq,$(x)"), tidySeries)
+
+# Finds the product of the 13 adjacent digits.
+global maxProduct = 0
+
+for element in tidySeries
+  for i in 1:length(element)-12
+    product = listOfProduct(element[i:i+12])
+    if product > maxProduct
+      global maxProduct = product
+    end
+  end
+end
+
+println("\nmaxProduct: $maxProduct\n")
